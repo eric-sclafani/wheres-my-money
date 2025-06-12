@@ -46,7 +46,6 @@ export class BudgetDisplayComponent implements OnInit {
     cashIn = computed(() => this.budget().cashIn);
 
     fg: FormGroup<BudgetForm>;
-    isEditing = signal(false);
 
     constructor() {
         effect(() => {
@@ -63,6 +62,8 @@ export class BudgetDisplayComponent implements OnInit {
             if (resp.success) {
                 this.refreshService.triggerRefresh();
                 this.menuTrigger()?.closeMenu();
+            } else {
+                console.error(resp.message);
             }
         });
     }

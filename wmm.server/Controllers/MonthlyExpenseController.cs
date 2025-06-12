@@ -18,7 +18,7 @@ public class MonthlyExpenseController : BaseController
 	public async Task<ActionResult<IEnumerable<MonthlyExpense>>> GetMonthlyExpenses()
 	{
 		var expenses = await _monthlyExpenseService.GetMonthlyExpenses();
-		return Ok(expenses);
+		return ApiResponse(expenses);
 	}
 
 	[HttpPost]

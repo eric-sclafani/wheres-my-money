@@ -13,10 +13,11 @@ import { Budget } from './models/budget';
 import { MonthlyExpense } from './models/monthlyExpense';
 import { forkJoin, Subject, takeUntil } from 'rxjs';
 import { RefreshService } from './services/refresh.service';
+import { MonthlyExpDisplayComponent } from './components/monthly-exp-display/monthly-exp-display.component';
 
 @Component({
     selector: 'app-root',
-    imports: [BudgetDisplayComponent],
+    imports: [BudgetDisplayComponent, MonthlyExpDisplayComponent],
     templateUrl: './app.component.html',
     changeDetection: ChangeDetectionStrategy.OnPush,
     styleUrl: './app.component.scss',

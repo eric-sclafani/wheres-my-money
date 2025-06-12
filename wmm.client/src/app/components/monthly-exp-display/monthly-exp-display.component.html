@@ -1,0 +1,6 @@
+@for (exp of monthlyExpenses(); track exp.id){
+    <div style="display:flex; gap:10px;">
+        <span>{{exp.category}}:</span>
+        <span>{{exp.amount}}</span>
+    </div>
+}

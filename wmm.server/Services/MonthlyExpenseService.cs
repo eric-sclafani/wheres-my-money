@@ -16,9 +16,13 @@ public class MonthlyExpenseService : BaseService, IMonthlyExpenseService
 		_budgetService = budgetService;
 	}
 
-	public async Task<IEnumerable<MonthlyExpense>> GetMonthlyExpenses()
+	public async Task<DynamicResult<IEnumerable<MonthlyExpense>>> GetMonthlyExpenses()
 	{
-		return await _context.MonthlyExpense.ToListAsync();
+		var resp = new DynamicResult<IEnumerable<MonthlyExpense>>
+		{
+			Data = await _context.MonthlyExpense.ToListAsync()
+		};
+		return resp;
 	}
 
 	public async Task<DynamicResult<MonthlyExpense>> AddMonthlyExpense(MonthlyExpense expense)
