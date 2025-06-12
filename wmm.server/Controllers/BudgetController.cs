@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using wmm.server.Interfaces;
 using wmm.server.Models;
-using wmm.server.Services;
 
 namespace wmm.server.Controllers;
 
@@ -17,8 +16,22 @@ public class BudgetController : BaseController
 	[HttpGet]
 	public async Task<IActionResult> GetBudget()
 	{
+		var resp = new DynamicResult<Budget>();
 		var result = await _budgetService.GetBudget();
-		return result != null ? Ok(result) : NotFound("Budget record not found");
+		if (result == null)
+		{
+			resp.StatusCode = 404;
+			resp.Message = "Budget record not found";
+		}
+		else
+		{
+			resp.Data = result;
+		}
+
+		return ApiResponse(resp);
+
+
+
 	}
 
 	[HttpPost]

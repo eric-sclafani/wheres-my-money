@@ -22,7 +22,7 @@ public class MonthlyExpenseController : BaseController
 	}
 
 	[HttpPost]
-	public async Task<IActionResult> NewMonthlyExpense(MonthlyExpense expense)
+	public async Task<IActionResult> AddMonthlyExpense(MonthlyExpense expense)
 	{
 		if (expense.Amount <= 0)
 		{

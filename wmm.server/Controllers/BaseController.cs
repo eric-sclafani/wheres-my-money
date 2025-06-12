@@ -12,6 +12,7 @@ public class BaseController : ControllerBase
 		return result.StatusCode switch
 		{
 			400 => BadRequest(result.Message),
+			404 => NotFound(result.Message),
 			500 => StatusCode(500, $"Internal server error: {result.Message}"),
 			_ => Ok(result)
 		};

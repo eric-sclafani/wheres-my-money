@@ -1,0 +1,25 @@
+.card-wrapper {
+    display: flex;
+    gap: 20px;
+}
+
+.card {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 250px;
+    max-width: 300px;
+    padding-top: 10px;
+}
+
+.card-entry {
+    display: flex;
+    justify-content: space-between;
+    gap: 5px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+}
