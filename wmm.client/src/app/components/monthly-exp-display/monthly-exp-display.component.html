@@ -1,6 +1,43 @@
-@for (exp of monthlyExpenses(); track exp.id){
-    <div style="display:flex; gap:10px;">
-        <span>{{exp.category}}:</span>
-        <span>{{exp.amount}}</span>
+<div class="card">
+    <div class="card-content">
+        @for (exp of monthlyExpenses(); track exp.id){
+            <div class="card-entry-wrapper">
+                <mat-icon>delete</mat-icon>
+                <mat-icon>edit</mat-icon>
+                <div class="card-entry">
+                    <span class="label">{{exp.category}}:</span>
+                    <span class="value">${{exp.amount}}</span>
+                </div>
+               
+            </div>
+           
+        }
     </div>
-}
+   
+    <button mat-raised-button [matMenuTriggerFor]="menu">Add New</button>
+        <mat-menu #menu="matMenu">
+            <form [formGroup]="fg" (ngSubmit)="onAddNew()" (click)="$event.stopPropagation()">
+                <mat-form-field>
+                    <mat-label>Category</mat-label>
+                    <input 
+                        matInput 
+                        type="text"
+                        formControlName="category">
+                </mat-form-field>
+                
+    
+                <mat-form-field>
+                    <mat-label>Amount</mat-label>
+                    <input 
+                        matInput 
+                        type="number"
+                        formControlName="amount"
+                        pattern="\d+">
+                </mat-form-field>
+                
+                <button mat-raised-button type="submit">Submit</button>
+            </form>
+            
+        </mat-menu>
+</div>
+

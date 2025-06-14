@@ -1,0 +1,28 @@
+.card {
+    display: flex;
+    flex-direction: column;
+}
+
+.card-entry {
+    cursor: pointer;
+    padding: 0 15px;
+
+
+    &:hover {
+        border-radius: 10px;
+        background-color: rgb(236, 236, 236, 0.7);
+    }
+
+
+}
+
+.card-entry-wrapper {
+    display: flex;
+
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+}
