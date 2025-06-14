@@ -1,22 +1,37 @@
 <div class="card">
     <div class="card-content">
         @for (exp of monthlyExpenses(); track exp.id){
-            <div class="card-entry-wrapper">
-                <mat-icon>delete</mat-icon>
-                <mat-icon>edit</mat-icon>
-                <div class="card-entry">
-                    <span class="label">{{exp.category}}:</span>
-                    <span class="value">${{exp.amount}}</span>
+
+            @if(exp.id == editingId){
+                <form [formGroup]="fg" (ngSubmit)="onEdit()" class="edit-form">
+                    <input formControlName="category">
+                    <input formControlName="amount">
+                    <button mat-raised-button type="submit">Submit</button>
+                </form>
+            }
+            @else {
+                <div class="card-entry-wrapper">
+                    <div class="card-label">
+                        <button mat-icon-button (click)="onDelete(exp)">
+                            <mat-icon>delete</mat-icon>
+                        </button>
+                        <button mat-icon-button (click)="setAsEditing(exp)">
+                            <mat-icon>edit</mat-icon>
+                        </button>
+                        <span class="label">{{exp.category}}:</span>
+                    </div>
+                    <div class="card-entry">
+                        <span class="value">${{exp.amount}}</span>
+                    </div>
+                   
                 </div>
-               
-            </div>
-           
+            }
         }
     </div>
    
-    <button mat-raised-button [matMenuTriggerFor]="menu">Add New</button>
+    <button mat-raised-button [matMenuTriggerFor]="menu" (menuClosed)="onMenuClosed()">Add New</button>
         <mat-menu #menu="matMenu">
-            <form [formGroup]="fg" (ngSubmit)="onAddNew()" (click)="$event.stopPropagation()">
+            <form [formGroup]="fg" (ngSubmit)="onAddNew()" (click)="$event.stopPropagation()" class="menu-form">
                 <mat-form-field>
                     <mat-label>Category</mat-label>
                     <input 

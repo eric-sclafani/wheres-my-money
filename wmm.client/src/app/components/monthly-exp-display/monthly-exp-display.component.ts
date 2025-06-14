@@ -42,9 +42,7 @@ export class MonthlyExpDisplayComponent implements OnInit {
     monthlyExpenses = input.required<MonthlyExpense[]>();
 
     fg: FormGroup<MonthlyExpForm>;
-    isEditing = false;
-
-    constructor() {}
+    editingId = 0;
 
     ngOnInit(): void {
         this.initForm();
@@ -62,6 +60,34 @@ export class MonthlyExpDisplayComponent implements OnInit {
                 }
                 this.fg.reset();
             });
+    }
+
+    onEdit() {
+        const exp = this.fg.value as MonthlyExpense;
+        exp.id = this.editingId;
+        this.apiService.updateMonthlyExpense(exp).subscribe((resp) => {
+            if (resp.success) {
+                this.refreshService.triggerRefresh();
+                this.editingId = 0;
+            }
+        });
+    }
+
+    setAsEditing(exp: MonthlyExpense) {
+        this.editingId = exp.id;
+        this.fg.patchValue(exp);
+    }
+
+    onDelete(exp: MonthlyExpense) {
+        this.apiService.deleteMonthlyExpense(exp.id).subscribe((resp) => {
+            if (resp.success) {
+                this.refreshService.triggerRefresh();
+            }
+        });
+    }
+
+    onMenuClosed() {
+        this.fg.reset();
     }
 
     private initForm() {
