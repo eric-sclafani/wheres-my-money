@@ -14,10 +14,15 @@ import { MonthlyExpense } from './models/monthlyExpense';
 import { forkJoin, Subject, takeUntil } from 'rxjs';
 import { RefreshService } from './services/refresh.service';
 import { MonthlyExpDisplayComponent } from './components/monthly-exp-display/monthly-exp-display.component';
+import { PurchaseTableComponent } from './components/purchase-table/purchase-table.component';
 
 @Component({
     selector: 'app-root',
-    imports: [BudgetDisplayComponent, MonthlyExpDisplayComponent],
+    imports: [
+        BudgetDisplayComponent,
+        MonthlyExpDisplayComponent,
+        PurchaseTableComponent,
+    ],
     templateUrl: './app.component.html',
     changeDetection: ChangeDetectionStrategy.OnPush,
     styleUrl: './app.component.scss',
@@ -27,7 +32,7 @@ export class AppComponent implements OnInit, OnDestroy {
     private readonly refreshService = inject(RefreshService);
     private readonly destroy$ = new Subject<void>();
 
-    puchases = signal<Purchase[]>([]);
+    purchases = signal<Purchase[]>([]);
     budget = signal<Budget>(new Budget());
     monthlyExp = signal<MonthlyExpense[]>([]);
 
@@ -50,7 +55,7 @@ export class AppComponent implements OnInit, OnDestroy {
             this.apiService.fetchPurchases(),
             this.apiService.fetchMonthlyExpenses(),
         ]).subscribe(([budget, purchases, expenses]) => {
-            this.puchases.set(purchases.data ?? []);
+            this.purchases.set(purchases.data ?? []);
             this.budget.set(budget.data ?? new Budget());
             this.monthlyExp.set(expenses.data ?? []);
         });

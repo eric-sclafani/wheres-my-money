@@ -1,10 +1,15 @@
-
 <main>
-    <app-budget-display
-        [budget]="budget()">
-    </app-budget-display>
+    <div class="side-displays">
+        <app-budget-display
+            [budget]="budget()">
+        </app-budget-display>
 
-    <app-monthly-exp-display
-        [monthlyExpenses]="monthlyExp()">
-    </app-monthly-exp-display>
+        <app-monthly-exp-display
+            [monthlyExpenses]="monthlyExp()">
+        </app-monthly-exp-display>
+    </div>
+
+    <app-purchase-table
+        [purchases]="purchases()">
+    </app-purchase-table>
 </main>
