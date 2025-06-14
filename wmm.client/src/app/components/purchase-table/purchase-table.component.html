@@ -1,9 +1,16 @@
 <div class="table-wrapper">
     <div class="table-header">
-      <button (click)="resetColumnFilters()" class="reset-cols">
-        Reset Column Filters
-      </button>
-      <mat-paginator hidePageSize="true" pageSize="10"> </mat-paginator>
+        <div class="table-header-buttons">
+            <button class="add-new" [matMenuTriggerFor]="menu" (menuClosed)="onMenuClosed()">
+                <mat-icon>add_circle</mat-icon>
+                Add New
+            </button>
+            <button (click)="resetColumnFilters()" class="reset-cols">
+                Reset Column Filters
+            </button>
+        </div>
+     
+        <mat-paginator hidePageSize="true" pageSize="10"> </mat-paginator>
     </div>
   
     <table
@@ -56,4 +63,64 @@
       <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
     </table>
-  </div>
+</div>
+
+
+<mat-menu #menu="matMenu">
+    <form [formGroup]="addEditFg" (ngSubmit)="onAddNew()" (click)="$event.stopPropagation()" class="menu-form">
+        <mat-form-field>
+            <mat-label>Date</mat-label>
+            <input 
+                matInput 
+                type="date"
+                formControlName="date">
+        </mat-form-field>
+        
+
+        <mat-form-field>
+            <mat-label>Description</mat-label>
+            <input 
+                matInput 
+                type="text"
+                formControlName="description"
+                >
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>Vendor</mat-label>
+            <input 
+                matInput 
+                type="text"
+                formControlName="vendor">
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>Tag</mat-label>
+            <input 
+                matInput 
+                type="text"
+                formControlName="tag">
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>Type</mat-label>
+            <input 
+                matInput 
+                type="text"
+                formControlName="type">
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>Amount</mat-label>
+            <input 
+                matInput 
+                type="number"
+                formControlName="amount"
+                pattern="\d+">
+        </mat-form-field>
+        
+        <button mat-raised-button type="submit">Submit</button>
+    </form>
+    
+</mat-menu>
+

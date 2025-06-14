@@ -15,10 +15,10 @@ public class PurchaseController : BaseController
 	}
 	
 	[HttpGet]
-	public async Task<ActionResult<IEnumerable<Purchase>>> GetPurchases()
+	public async Task<ActionResult<Purchase[]>> GetPurchases()
 	{
-		var purchases = await _purchaseService.GetPurchases();
-		return Ok(purchases);
+		var result = await _purchaseService.GetPurchases();
+		return Ok(result);
 	}
 
 	[HttpPost]

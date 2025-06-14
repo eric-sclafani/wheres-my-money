@@ -13,6 +13,7 @@
     align-items: center;
     background-color: #faf9fd;
 
+    .add-new,
     .reset-cols {
         padding: 10px;
         border: none;
@@ -22,6 +23,17 @@
         border-radius: 10px;
         cursor: pointer;
     }
+}
+
+.add-new {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+}
+
+.table-header-buttons {
+    display: flex;
+    gap: 20px;
 }
 
 
@@ -53,24 +65,6 @@
     }
 }
 
-select {
-    margin-top: 5px;
-    border: none;
-    border-radius: 10px;
-    background: #fffefe;
-    color: rgb(117, 117, 117);
-    padding: 10px;
-    transition: 0.4s;
-    font-size: 0.9rem;
-}
-
-select:hover,
-select:focus {
-    background: #ddd;
-    cursor: pointer;
-}
-
-
 .no-data-row {
     text-align: center;
     padding: 20px;
@@ -93,4 +87,10 @@ th {
 
 .mat-mdc-row:hover {
     background-color: #f1f3f4;
+}
+
+.menu-form {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
 }

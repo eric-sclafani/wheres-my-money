@@ -14,9 +14,13 @@ public class PurchaseService : BaseService, IPurchaseService
 		_context = context;
 	}
 
-	public async Task<IEnumerable<Purchase>> GetPurchases()
+	public async Task<DynamicResult<IEnumerable<Purchase>>> GetPurchases()
 	{
-		return (await _context.Purchase.ToListAsync()).OrderBy(p => p.Date);
+		var result = new DynamicResult<IEnumerable<Purchase>>
+		{
+			Data = (await _context.Purchase.ToListAsync()).OrderBy(p => p.Date)
+		};
+		return result;
 	}
 
 	public async Task<DynamicResult<Purchase>> AddPurchase(Purchase purchase)
