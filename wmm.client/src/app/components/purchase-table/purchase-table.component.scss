@@ -1,6 +1,6 @@
 .table-wrapper {
     max-height: 500px;
-    max-width: 100vw;
+    max-width: 70vw;
     overflow: scroll;
     margin-top: 10px;
     border: solid rgba(190, 226, 255, 0.3);
@@ -80,6 +80,10 @@ th {
     background-color: rgb(221, 237, 242) !important;
 }
 
+tr {
+    cursor: pointer;
+}
+
 
 .mat-mdc-row:nth-child(odd) {
     background-color: #ebf1fa;
@@ -93,4 +97,14 @@ th {
     display: flex;
     flex-direction: column;
     padding: 10px;
+}
+
+.row-input {
+    width: 150px;
+}
+
+.row-input-amount {
+
+    width: 100px;
+
 }

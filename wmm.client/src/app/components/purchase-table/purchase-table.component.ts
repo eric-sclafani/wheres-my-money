@@ -1,9 +1,11 @@
 import {
     ChangeDetectionStrategy,
     Component,
+    computed,
     effect,
     inject,
     input,
+    viewChild,
     ViewChild,
 } from '@angular/core';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
@@ -28,6 +30,7 @@ import { MatMenuModule, MatMenuTrigger } from '@angular/material/menu';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { PurchaseForm } from '../../forms/purchaseForm';
+import { Budget } from '../../models/budget';
 
 @Component({
     selector: 'app-purchase-table',
@@ -52,7 +55,7 @@ import { PurchaseForm } from '../../forms/purchaseForm';
 export class PurchaseTableComponent {
     @ViewChild(MatSort) sort: MatSort;
     @ViewChild(MatPaginator) paginator: MatPaginator;
-    @ViewChild(MatMenuTrigger) menuTrigger: MatMenuTrigger;
+    menuTrigger = viewChild(MatMenuTrigger);
 
     private readonly destroy$ = new Subject<void>();
     private readonly refreshService = inject(RefreshService);
@@ -64,16 +67,25 @@ export class PurchaseTableComponent {
     displayedColumns: string[];
     dataSource = new MatTableDataSource<Purchase>();
 
-    fg: FormGroup;
+    colFilterFg: FormGroup;
     addEditFg: FormGroup<PurchaseForm>;
 
     purchases = input.required<Purchase[]>();
+    budget = input.required<Budget>();
+    displayData = computed(() => {
+        return this.purchases().sort((a, b) => (a.id > b.id ? 1 : 0));
+    });
+
+    editingId = 0;
 
     constructor() {
         this.initColSearchFilters();
 
         effect(() => {
-            this.dataSource.data = this.purchases();
+            this.dataSource.data = this.computeBalances(
+                this.displayData(),
+                this.budget()
+            );
         });
     }
 
@@ -103,12 +115,56 @@ export class PurchaseTableComponent {
             .subscribe((resp) => {
                 if (resp.success) {
                     this.refreshService.triggerRefresh();
+                    this.menuTrigger()?.closeMenu();
                 }
             });
     }
 
+    onEditSubmit() {
+        const purchase = this.addEditFg.value as Purchase;
+        console.log(purchase);
+        purchase.id = this.editingId;
+
+        this.apiService.updatePurchase(purchase).subscribe((resp) => {
+            if (resp.success) {
+                this.refreshService.triggerRefresh();
+                this.editingId = 0;
+                this.addEditFg.reset();
+            }
+        });
+    }
+
     onMenuClosed() {
         this.addEditFg.reset();
+    }
+
+    onRowDblClick(purchase: Purchase) {
+        this.editingId = purchase.id;
+        purchase.date = this.datePipe.transform(
+            purchase.date,
+            'yyyy-MM-dd'
+        ) as string;
+        this.addEditFg.patchValue(purchase);
+    }
+
+    onDelete(purchase: Purchase) {
+        this.apiService.deletePurchase(purchase.id).subscribe((resp) => {
+            if (resp.success) {
+                this.refreshService.triggerRefresh();
+            }
+        });
+    }
+
+    private computeBalances(purchases: Purchase[], budget: Budget): Purchase[] {
+        if (budget != null && budget.disposableIncome != null) {
+            let balance = budget.disposableIncome;
+            purchases.forEach((p) => {
+                p.balance = balance - p.amount;
+                balance = balance - p.amount;
+            });
+        }
+
+        return purchases;
     }
 
     private initAddEditFg(): void {
@@ -134,7 +190,7 @@ export class PurchaseTableComponent {
                     nonNullable: true,
                 });
             });
-        this.fg = this.fb.group(formGroupConfig);
+        this.colFilterFg = this.fb.group(formGroupConfig);
     }
 
     private initColSearchFilters(): void {
@@ -172,7 +228,7 @@ export class PurchaseTableComponent {
     }
 
     private initFormGroupSubscription(): void {
-        this.fg.valueChanges
+        this.colFilterFg.valueChanges
             .pipe(takeUntil(this.destroy$))
             .subscribe((filterData: Purchase) => {
                 const filter: Record<string, any> = { ...filterData };
@@ -196,6 +252,6 @@ export class PurchaseTableComponent {
     }
 
     resetColumnFilters(): void {
-        this.fg.reset();
+        this.colFilterFg.reset();
     }
 }

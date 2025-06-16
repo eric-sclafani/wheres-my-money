@@ -6,4 +6,5 @@ export interface Purchase {
     tag: string | null;
     type: string | null;
     amount: number;
+    balance: number;
 }

@@ -8,10 +8,13 @@ namespace wmm.server.Controllers;
 public class PurchaseController : BaseController
 {
 	private readonly IPurchaseService _purchaseService;
+	private readonly IBudgetService _budgetService;
+	
 
-	public PurchaseController(IPurchaseService purchaseService)
+	public PurchaseController(IPurchaseService purchaseService, IBudgetService budgetService)
 	{
 		_purchaseService = purchaseService;
+		_budgetService = budgetService;
 	}
 	
 	[HttpGet]

@@ -10,6 +10,11 @@ export interface Column {
 const stringify = (item: any) => `${item}`;
 export const columns: Column[] = [
     {
+        columnDef: 'delete',
+        header: '',
+        cell: (elem: Purchase) => '',
+    },
+    {
         columnDef: 'date',
         header: 'Date',
         type: 'date',
@@ -45,6 +50,6 @@ export const columns: Column[] = [
         columnDef: 'balance',
         header: 'Balance',
         type: 'price',
-        cell: (elem: Purchase) => '',
+        cell: (elem: Purchase) => stringify(elem.balance),
     },
 ];

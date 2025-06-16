@@ -22,35 +22,80 @@
     >
       @for (col of columns; track $index) {
         <ng-container [matColumnDef]="col.columnDef">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header [formGroup]="fg">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header [formGroup]="colFilterFg">
             <div class="col-header-wrapper">
               <div class="col-title">{{ col.header }}</div>
-                <div class="col-search-wrapper">
-                  <input
-                    type="text"
-                    class="col-search-input"
-                    [placeholder]="'Search ' + col.header"
-                    [formControlName]="col.columnDef"
-                    (keydown)="$event.stopPropagation()"
-                    (click)="$event.stopPropagation()"
-                  />
-                </div>
+
+                @if(col.columnDef != 'delete'){
+                  <div class="col-search-wrapper">
+                    <input
+                      type="text"
+                      class="col-search-input"
+                      [placeholder]="'Search ' + col.header"
+                      [formControlName]="col.columnDef"
+                      (keydown)="$event.stopPropagation()"
+                      (click)="$event.stopPropagation()"
+                    />
+                  </div>
+                }
+               
               
             </div>
           </th>
   
           <td mat-cell *matCellDef="let row" class="table-cell">
-            @if (col.type == "date") {
-              {{
-                col.cell(row) == "null"
-                  ? ""
-                  : (col.cell(row) | date: "MM/dd/yyyy")
-              }}
-            } @else if (col.type == "price") {
-              {{ col.cell(row) == "null" ? "" : (col.cell(row) | currency) }}
-            } @else {
-              {{ col.cell(row) == "null" ? "" : col.cell(row) }}
-            }
+            <form (dblclick)="onRowDblClick(row)" [formGroup]="addEditFg">
+
+              @if(editingId == row.id){
+                @switch(col.columnDef) {
+                  @case ('date'){
+                    <input type="date" [formControlName]="col.columnDef" class="row-input" (keydown.enter)="onEditSubmit()">
+                  }
+
+                  @case ('description'){
+                    <input type="text" [formControlName]="col.columnDef" class="row-input" (keydown.enter)="onEditSubmit()">
+                  }
+
+                  @case ('vendor'){
+                    <input type="text" [formControlName]="col.columnDef" class="row-input"(keydown.enter)="onEditSubmit()">
+                  }
+
+                  @case ('type'){
+                    <input type="text" [formControlName]="col.columnDef" class="row-input"(keydown.enter)="onEditSubmit()">
+                  }
+
+                  @case ('tag'){
+                    <input type="text" [formControlName]="col.columnDef" class="row-input"(keydown.enter)="onEditSubmit()">
+                  }
+
+                  @case ('amount'){
+                    <input type="number" [formControlName]="col.columnDef" class="row-input-amount"(keydown.enter)="onEditSubmit()">
+                  }
+                }
+              }
+              @else {
+                @if (col.type == "date") {
+                  {{
+                    col.cell(row) == "null"
+                      ? ""
+                      : (col.cell(row) | date: "MM/dd/yyyy")
+                  }}
+                } @else if (col.type == "price") {
+                  {{ col.cell(row) == "null" ? "" : (col.cell(row) | currency) }}
+                }
+                @else if (col.columnDef == 'delete'){
+                  <button mat-icon-button class="delete-btn" (click)="onDelete(row)">
+                    <mat-icon>delete</mat-icon>
+                </button>
+                } 
+                
+                @else {
+                  {{ col.cell(row) == "null" ? "" : col.cell(row) }}
+                }
+              }
+              
+            </form>
+            
           </td>
         </ng-container>
       }

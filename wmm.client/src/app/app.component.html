@@ -1,3 +1,6 @@
+<header>
+   <h1>Where's My Money?</h1> 
+</header>
 <main>
     <div class="side-displays">
         <app-budget-display
@@ -10,6 +13,7 @@
     </div>
 
     <app-purchase-table
-        [purchases]="purchases()">
+        [purchases]="purchases()"
+        [budget]="budget()">
     </app-purchase-table>
 </main>
